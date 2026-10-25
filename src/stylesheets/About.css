@@ -1,0 +1,195 @@
+.about-section,
+.experience-section,
+.projects-section,
+.toolbox-section,
+.resume-section,
+.socials-section {
+  min-height: calc(100vh - 8rem);
+  padding: 1rem 0;
+  animation: section-arrive 420ms ease both;
+}
+
+@keyframes section-arrive {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.about-content {
+  max-width: 960px;
+}
+
+.personal-info {
+  display: grid;
+  grid-template-columns: minmax(200px, 0.7fr) minmax(0, 1.5fr);
+  align-items: start;
+  gap: clamp(2rem, 6vw, 4.5rem);
+  margin-bottom: 5rem;
+}
+
+.profile-image {
+  position: relative;
+  max-width: 300px;
+  aspect-ratio: 4 / 5;
+}
+
+.profile-image::after {
+  position: absolute;
+  z-index: -1;
+  inset: 12px -12px -12px 12px;
+  border: 1px solid var(--secondary-color);
+  border-radius: 3px;
+  content: "";
+  transition: transform var(--transition);
+}
+
+.profile-image:hover::after {
+  transform: translate(-4px, -4px);
+}
+
+.profile-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  background: var(--surface-muted);
+  object-fit: cover;
+  filter: saturate(0.72);
+  transition: filter 300ms ease, transform 300ms ease;
+}
+
+.profile-image:hover img {
+  filter: saturate(1);
+  transform: translate(-2px, -2px);
+}
+
+.bio p {
+  margin-bottom: 1.2rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.9;
+}
+
+.journey h3 {
+  margin-bottom: 2.25rem;
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+.timeline {
+  position: relative;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.timeline::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: var(--border-color);
+  content: "";
+}
+
+.timeline-item {
+  position: relative;
+  width: 50%;
+  padding: 0.6rem 2.4rem 1.3rem;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 500ms ease, transform 500ms ease;
+}
+
+.timeline-item.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.timeline-item.left { left: 0; }
+.timeline-item.right { left: 50%; }
+
+.timeline-item::after {
+  position: absolute;
+  z-index: 1;
+  top: 1.25rem;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--primary-color);
+  border-radius: 50%;
+  background: var(--secondary-color);
+  box-shadow: 0 0 0 1px var(--secondary-color);
+  content: "";
+}
+
+.timeline-item.left::after { right: -5px; }
+.timeline-item.right::after { left: -5px; }
+
+.timeline-content {
+  padding: 1.25rem 1.4rem;
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  background: var(--surface-color);
+  box-shadow: 0 10px 30px var(--shadow-color);
+  transition: transform var(--transition), border-color var(--transition);
+}
+
+.timeline-content:hover {
+  transform: translateY(-3px);
+  border-color: var(--secondary-color);
+}
+
+.year {
+  display: inline-block;
+  margin-bottom: 0.8rem;
+  color: var(--secondary-color);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+}
+
+.timeline-content h4 {
+  margin-bottom: 0.6rem;
+  font-size: 1.1rem;
+}
+
+.timeline-content p {
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+}
+
+@media (max-width: 680px) {
+  .about-section,
+  .experience-section,
+  .projects-section,
+  .toolbox-section,
+  .resume-section,
+  .socials-section {
+    min-height: auto;
+    padding: 0;
+  }
+
+  .personal-info {
+    grid-template-columns: 1fr;
+    gap: 2.2rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .profile-image {
+    width: min(65%, 250px);
+    margin-inline: auto;
+  }
+
+  .timeline::after { left: 8px; }
+
+  .timeline-item,
+  .timeline-item.right {
+    left: 0;
+    width: 100%;
+    padding: 0.4rem 0 1.2rem 2rem;
+  }
+
+  .timeline-item.left::after,
+  .timeline-item.right::after { left: 4px; }
+}
