@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: monika-portfolio
+    runtime: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: REACT_APP_SERVICE_ID
+        sync: false
+      - key: REACT_APP_TEMPLATE_ID
+        sync: false
+      - key: REACT_APP_PUBLIC_KEY
+        sync: false

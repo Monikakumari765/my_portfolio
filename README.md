@@ -98,8 +98,8 @@ Never commit `.env.local` or real API credentials. The EmailJS public key is use
 Deploy as a **Web Service** so Express can serve the React build and handle Gemini requests.
 
 1. Push the project to a GitHub repository.
-2. In Render, choose **New → Web Service** and connect the repository.
-3. Use these settings:
+2. In Render, choose **New → Blueprint** and connect the repository to apply [`render.yaml`](./render.yaml), or create a **Web Service** manually with the settings below. Do not create a Static Site: it cannot run the chat API.
+3. For a manual Web Service, use these settings:
 
    | Setting | Value |
    | --- | --- |

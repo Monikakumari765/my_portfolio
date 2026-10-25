@@ -16,6 +16,12 @@ const getApiErrorMessage = (error) => {
   const status = error.response?.status;
   const apiMessage = error.response?.data?.error?.message;
 
+  if (
+    typeof error.response?.data === "string" ||
+    error.response?.headers?.["content-type"]?.includes("text/html")
+  ) {
+    return "The chat backend is not running. Deploy this project as a Render Web Service with `node server.js`; a Static Site cannot run the chat API.";
+  }
   if (status === 400 || status === 401 || status === 403) {
     return `Gemini rejected the request${apiMessage ? `: ${apiMessage}` : ". Check the server API key and Google API access."}`;
   }
@@ -178,8 +184,10 @@ const Chatbot = () => {
       });
       const botMessage = response.data?.text;
 
-      if (!botMessage) {
-        throw new Error("Gemini returned an empty response.");
+      if (typeof botMessage !== "string" || !botMessage.trim()) {
+        throw new Error(
+          "The chat API did not return a reply. Confirm the Render Web Service is running `node server.js` and has GEMINI_API_KEY configured."
+        );
       }
 
       setMessages((currentMessages) => [
@@ -219,11 +227,11 @@ const Chatbot = () => {
         }
       }
     } catch (error) {
-      const message = error.response
+      const message = error.message?.startsWith("The chat API")
+        ? error.message
+        : error.response
         ? getApiErrorMessage(error)
-        : error.message === "Gemini returned an empty response."
-          ? error.message
-          : getApiErrorMessage(error);
+        : getApiErrorMessage(error);
 
       console.error("Gemini chatbot request failed:", {
         status: error.response?.status,
