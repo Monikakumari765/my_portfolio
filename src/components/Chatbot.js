@@ -25,6 +25,9 @@ const getApiErrorMessage = (error) => {
   if (status === 429) {
     return `Gemini's request quota was reached${apiMessage ? `: ${apiMessage}` : ". Check your Google AI quota and try again later."}`;
   }
+  if (status === 502) {
+    return apiMessage || "Gemini could not generate a reply. Please rephrase your question and try again.";
+  }
   if (status) {
     return `Gemini returned an error (${status})${apiMessage ? `: ${apiMessage}` : ". Please try again later."}`;
   }

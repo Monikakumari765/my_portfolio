@@ -82,7 +82,7 @@ app.post("/api/chat", async (req, res) => {
         },
         generationConfig: {
           temperature: 0.3,
-          maxOutputTokens: 300,
+          maxOutputTokens: 512,
         },
         contents,
       },
@@ -93,13 +93,31 @@ app.post("/api/chat", async (req, res) => {
       }
     );
 
-    const text = response.data?.candidates?.[0]?.content?.parts
+    const candidate = response.data?.candidates?.[0];
+    const text = candidate?.content?.parts
       ?.map((part) => part.text)
       .filter(Boolean)
       .join("\n");
     if (!text) {
+      const finishReason = candidate?.finishReason;
+      const blockReason = response.data?.promptFeedback?.blockReason;
+      console.error("Gemini returned no text:", {
+        finishReason,
+        blockReason,
+        candidateCount: response.data?.candidates?.length || 0,
+      });
+
+      let message = "Gemini could not generate a reply. Please rephrase your question and try again.";
+      if (blockReason || finishReason === "SAFETY") {
+        message = "Gemini blocked this question. Please rephrase it and try again.";
+      } else if (finishReason === "MAX_TOKENS") {
+        message = "Gemini stopped before producing a complete reply. Please try again.";
+      } else if (finishReason === "RECITATION") {
+        message = "Gemini could not provide that reply. Please ask in a different way.";
+      }
+
       return res.status(502).json({
-        error: { message: "Gemini returned an empty response. Please try again." },
+        error: { message },
       });
     }
 
